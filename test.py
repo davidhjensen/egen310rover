@@ -1,10 +1,18 @@
 from pyPS4Controller.controller import Controller
+from time import sleep
+import RPi.GPIO as GPIO
 
+SERVO_PIN = 4
+SERVO_HZ = 50 # 20ms
 
 class MyController(Controller):
 
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(SERVO_PIN, GPIO.OUT)
+        pwm = GPIO.PWM(SERVO_PIN, SERVO_HZ)
+        pwm.start(0)
 
     def on_x_press(self):
        print("Hello world")
@@ -13,8 +21,14 @@ class MyController(Controller):
        print("Goodbye world")
 
     def on_L2_press(self, value):
-        percent = value / (32786*2)
-        print("Throttle: %.2f" % value)
+        proportion = (32768 + value) / (32786*2)
+        duty_percent = 2.5 + proportion*10
+        print(duty_percent)
+        #pwm.ChangeDutyCycle(duty_percent)
+
+    def on_L2_release(self):
+        print("0")
+
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 # you can start listening before controller is paired, as long as you pair it within the timeout window
