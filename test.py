@@ -37,6 +37,9 @@ class MyController(Controller):
         #self.pwm.ChangeDutyCycle(duty_percent)
         self.pwm.change_duty_cycle(duty_percent)
 
+    def on_R3_x_at_rest(self):
+        self.pwm.change_duty_cycle(7.5)
+
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 # you can start listening before controller is paired, as long as you pair it within the timeout window
