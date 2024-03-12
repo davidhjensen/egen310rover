@@ -20,15 +20,15 @@ class MyController(Controller):
     def on_x_release(self):
        print("Goodbye world")
 
-    def on_L2_press(self, value):
-        proportion = (32768 + value) / (32786*2)
-        duty_percent = 2.5 + proportion*10
-        print(duty_percent)
+    def on_R3_left(self, value):
+        prop_left = -value / 32786
+        duty_percent = 7.5 - prop_left*5
         self.pwm.ChangeDutyCycle(duty_percent)
 
-    def on_L2_release(self):
-        print("0")
-        self.pwm.ChangeDutyCycle(2.5)
+    def on_R3_right(self, value):
+        prop_right = value / 32786
+        duty_percent = 7.5 - prop_right*5
+        self.pwm.ChangeDutyCycle(duty_percent)
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
