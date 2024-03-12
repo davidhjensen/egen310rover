@@ -9,10 +9,10 @@ class MyController(Controller):
 
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(SERVO_PIN, GPIO.OUT)
-        pwm = GPIO.PWM(SERVO_PIN, SERVO_HZ)
-        pwm.start(0)
+        self.pwm = GPIO.PWM(SERVO_PIN, SERVO_HZ)
+        self.pwm.start(0)
 
     def on_x_press(self):
        print("Hello world")
@@ -24,10 +24,11 @@ class MyController(Controller):
         proportion = (32768 + value) / (32786*2)
         duty_percent = 2.5 + proportion*10
         print(duty_percent)
-        #pwm.ChangeDutyCycle(duty_percent)
+        self.pwm.ChangeDutyCycle(duty_percent)
 
     def on_L2_release(self):
         print("0")
+        self.pwm.ChangeDutyCycle(2.5)
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
