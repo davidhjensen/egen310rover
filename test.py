@@ -1,17 +1,22 @@
 from pyPS4Controller.controller import Controller
 from time import sleep
 import RPi.GPIO as GPIO
+from rpi_harware_pwm import HardwarePWM
 
-SERVO_PIN = 4
+SERVO_PIN = 13
 SERVO_HZ = 50 # 20ms
 
 class MyController(Controller):
 
     def __init__(self, **kwargs):
         Controller.__init__(self, **kwargs)
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(SERVO_PIN, GPIO.OUT)
-        self.pwm = GPIO.PWM(SERVO_PIN, SERVO_HZ)
+        #--GPIO--#
+        #GPIO.setmode(GPIO.BCM)
+        #GPIO.setup(SERVO_PIN, GPIO.OUT)
+        #self.pwm = GPIO.PWM(SERVO_PIN, SERVO_HZ)
+        #self.pwm.start(0)
+        #--HardwarePWM--#
+        self.pwm = HardwarePWM(pwm_channel=0, hz=SERVO_HZ, chip=0)
         self.pwm.start(0)
 
     def on_x_press(self):
@@ -23,12 +28,14 @@ class MyController(Controller):
     def on_R3_left(self, value):
         prop_left = -value / 32786
         duty_percent = 7.5 - prop_left*5
-        self.pwm.ChangeDutyCycle(duty_percent)
+        #self.pwm.ChangeDutyCycle(duty_percent)
+        self.pwm.change_duty_cycle(duty_percent)
 
     def on_R3_right(self, value):
         prop_right = value / 32786
         duty_percent = 7.5 - prop_right*5
-        self.pwm.ChangeDutyCycle(duty_percent)
+        #self.pwm.ChangeDutyCycle(duty_percent)
+        self.pwm.change_duty_cycle(duty_percent)
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
