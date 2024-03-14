@@ -23,6 +23,7 @@ def motor_dir_GPIO_setup():
 
 #---Hardware PWM---#
 # ch0 is pin 18 | ch1 is pin 19
+# DO NOT USE these pins with GPIO - will need to reboot to enable again
 motor_dir_GPIO_setup()
 motor_pwm_hw = HardwarePWM(pwm_channel=0, hz=MOTOR_HZ)
 motor_pwm_hw.start(0)

@@ -2,7 +2,8 @@ from time import sleep
 import RPi.GPIO as GPIO
 from rpi_hardware_pwm import HardwarePWM
 
-MOTOR_PWM = 18
+# ONLY set this to pin 12 or 13 - 18 and 19 reserved for hardware PWM
+MOTOR_PWM = 12
 MOTOR_HZ = 1000
 MOTOR_EN1 = 5
 MOTOR_EN2 = 6
