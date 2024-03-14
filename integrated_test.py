@@ -7,6 +7,7 @@ SERVO_PIN = 19
 SERVO_HZ = 50 # 20ms
 
 MOTOR_PWM = 18
+MOTOR_HZ = 1000
 MOTOR_EN1 = 5
 MOTOR_EN2 = 6
 
@@ -45,12 +46,13 @@ class MyController(Controller):
     
     def on_R3_left(self, value):
         prop_left = -value / 32786
-        duty_percent = 7.5 - prop_left*5
+        duty_percent = 7.5 - (prop_left**2)*5
         self.servo_pwm_hw.change_duty_cycle(duty_percent)
 
     def on_R3_right(self, value):
         prop_right = value / 32786
-        duty_percent = 7.5 + prop_right*5
+        duty_percent = 7.5 + (prop_right**2)*5
+        self.servo_pwm_hw.change_duty_cycle(duty_percent)
         self.servo_pwm_hw.change_duty_cycle(duty_percent)
 
     def on_R3_x_at_rest(self):
@@ -59,7 +61,7 @@ class MyController(Controller):
 
     def on_L3_up(self, value):
         prop_left = -value / 32786
-        duty_percent = prop_left*40
+        duty_percent = prop_left*60
 
         if self.motor_state != 1:
             GPIO.output(MOTOR_EN1, GPIO.LOW)
@@ -70,7 +72,7 @@ class MyController(Controller):
 
     def on_L3_down(self, value):
         prop_left = value / 32786
-        duty_percent = prop_left*20
+        duty_percent = prop_left*40
 
         if self.motor_state != -1:
             GPIO.output(MOTOR_EN1, GPIO.HIGH)
@@ -85,7 +87,7 @@ class MyController(Controller):
             GPIO.output(MOTOR_EN2, GPIO.LOW)
             self.motor_state = 0
 
-        self.motor_pwm.ChangeDutyCycle(0)
+        self.motor_pwm_hw.change_duty_cycle(0)
 
 try:
     controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
