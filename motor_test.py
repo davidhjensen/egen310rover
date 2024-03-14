@@ -2,7 +2,7 @@ from time import sleep
 import RPi.GPIO as GPIO
 from rpi_hardware_pwm import HardwarePWM
 
-MOTOR_PWM = 13
+MOTOR_PWM = 18
 MOTOR_HZ = 1000
 MOTOR_EN1 = 5
 MOTOR_EN2 = 6
@@ -14,14 +14,16 @@ MOTOR_EN2 = 6
 #   0   1   -> CW
 #   1   0   -> CCW    
 #   1   1   -> stop
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(MOTOR_EN1, GPIO.OUT)
-GPIO.setup(MOTOR_EN2, GPIO.OUT)
-GPIO.output(MOTOR_EN1, GPIO.LOW)
-GPIO.output(MOTOR_EN2, GPIO.LOW)
+def motor_dir_GPIO_setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(MOTOR_EN1, GPIO.OUT)
+    GPIO.setup(MOTOR_EN2, GPIO.OUT)
+    GPIO.output(MOTOR_EN1, GPIO.LOW)
+    GPIO.output(MOTOR_EN2, GPIO.LOW)
 
 
 #---Software PWM---#
+motor_dir_GPIO_setup()
 GPIO.setup(MOTOR_PWM, GPIO.OUT)
 motor_pwm_sw = GPIO.PWM(MOTOR_PWM, MOTOR_HZ)
 motor_pwm_sw.start(0)
@@ -44,11 +46,13 @@ motor_pwm_sw.ChangeDutyCycle(0)
 GPIO.output(MOTOR_EN1, GPIO.LOW)
 GPIO.output(MOTOR_EN2, GPIO.LOW)
 motor_pwm_sw.stop()
+GPIO.cleanup()
 
 
 #---Hardware PWM---#
-# ch0 is pin 12 | ch1 is pin 13
-motor_pwm_hw = HardwarePWM(pwm_channel=1, hz=MOTOR_HZ)
+# ch0 is pin 18 | ch1 is pin 19
+motor_dir_GPIO_setup()
+motor_pwm_hw = HardwarePWM(pwm_channel=0, hz=MOTOR_HZ)
 motor_pwm_hw.start(0)
 
 # forward for 2 sec at 50% duty
@@ -69,6 +73,4 @@ motor_pwm_hw.change_duty_cycle(0)
 GPIO.output(MOTOR_EN1, GPIO.LOW)
 GPIO.output(MOTOR_EN2, GPIO.LOW)
 motor_pwm_hw.stop()
-
-# ensure all pins are reset
 GPIO.cleanup()
