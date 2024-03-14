@@ -6,6 +6,7 @@ SERVO_PWM = 13
 SERVO_HZ = 50
 
 #---Software PWM---#
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(SERVO_PWM, GPIO.OUT)
 motor_pwm_sw = GPIO.PWM(SERVO_PWM, SERVO_HZ)
 
