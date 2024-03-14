@@ -22,7 +22,7 @@ GPIO.output(MOTOR_EN2, GPIO.LOW)
 
 
 #---Software PWM---#
-GPIO.setup(SERVO_PIN, GPIO.OUT)
+GPIO.setup(MOTOR_PWM, GPIO.OUT)
 motor_pwm_sw = GPIO.PWM(MOTOR_PWM, MOTOR_HZ)
 motor_pwm_sw.start(0)
 
