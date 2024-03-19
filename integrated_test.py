@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 from rpi_hardware_pwm import HardwarePWM
 import board
 import adafruit_ahtx0
+from subprocess import call
 
 SERVO_PIN = 19
 SERVO_HZ = 50 # 20ms
@@ -51,11 +52,13 @@ class MyController(Controller):
         controller.stop = True
     
     def on_x_press(self):
-        print("Current Temperature: %.2f\u00B0F" % ((32+1.8*self.sensor.temperature)))
-    
+        msg = "Current Temperature: %.2f\u00B0F" % ((32+1.8*self.sensor.temperature))
+        call(['espeak -ven-scottish -s140 ' + msg.replace(' ', '_') + ' 2>/dev/null &'], shell=True)
+
     def on_circle_press(self):
-        print("Current Relative Humidity: %.2f%%" % self.sensor.relative_humidity)
-    
+        msg = "Current Relative Humidity: %.2f%%" % self.sensor.relative_humidity
+        call(['espeak -ven-scottish -s140 ' + msg.replace(' ', '_') + ' 2>/dev/null &'], shell=True)
+
     def on_R3_left(self, value):
         prop_left = -value / 32786
         duty_percent = 7.5 - (prop_left**2)*5
