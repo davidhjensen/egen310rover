@@ -52,11 +52,11 @@ class MyController(Controller):
         controller.stop = True
     
     def on_x_press(self):
-        msg = "Current Temperature: %.2f\u00B0F" % ((32+1.8*self.sensor.temperature))
+        msg = "The current temperature is %.2f\u00B0 fahrenheit" % ((32+1.8*self.sensor.temperature))
         call(['espeak -ven-scottish -s140 ' + msg.replace(' ', '_') + ' 2>/dev/null &'], shell=True)
 
     def on_circle_press(self):
-        msg = "Current Relative Humidity: %.2f%%" % self.sensor.relative_humidity
+        msg = "The current relative humidity is %.2f%%" % self.sensor.relative_humidity
         call(['espeak -ven-scottish -s140 ' + msg.replace(' ', '_') + ' 2>/dev/null &'], shell=True)
 
     def on_R3_left(self, value):
