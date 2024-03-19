@@ -2,6 +2,8 @@ from pyPS4Controller.controller import Controller
 from time import sleep
 import RPi.GPIO as GPIO
 from rpi_hardware_pwm import HardwarePWM
+import board
+import adafruit_ahtx0
 
 SERVO_PIN = 19
 SERVO_HZ = 50 # 20ms
@@ -33,6 +35,7 @@ class MyController(Controller):
         self.motor_state = 0
 
         #---Hardware PWM---#
+        # Motor and servo control
         # ch0 is pin 18 | ch1 is pin 19
         # DO NOT USE these pins with GPIO - will need to reboot to enable again
         self.motor_pwm_hw = HardwarePWM(pwm_channel=0, hz=MOTOR_HZ)
@@ -40,9 +43,18 @@ class MyController(Controller):
         self.servo_pwm_hw = HardwarePWM(pwm_channel=1, hz=SERVO_HZ)
         self.servo_pwm_hw.start(7.5)
 
-    def on_x_press(self):
+        #---Sensor Setup---#
+        self.sensor = adafruit_ahtx0.AHTx0(board.I2C())
+
+    def on_playstation_button_press(self):
         print("Exiting...")
         controller.stop = True
+    
+    def on_x_press(self):
+        print("Current Temperature: %.2f%cF" % ((32+1.8*self.sensor.temperature), 248))
+    
+    def on_circle_press(self):
+        print("Current Relative Humidity: %.2f%%" % self.sensor.relative_humidity)
     
     def on_R3_left(self, value):
         prop_left = -value / 32786
