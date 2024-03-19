@@ -51,7 +51,7 @@ class MyController(Controller):
         controller.stop = True
     
     def on_x_press(self):
-        print("Current Temperature: %.2f%cF" % ((32+1.8*self.sensor.temperature), 248))
+        print("Current Temperature: %.2f\u00B0F" % ((32+1.8*self.sensor.temperature)))
     
     def on_circle_press(self):
         print("Current Relative Humidity: %.2f%%" % self.sensor.relative_humidity)
