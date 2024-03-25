@@ -53,10 +53,12 @@ class MyController(Controller):
     
     def on_x_press(self):
         msg = "The current temperature is %.2f\u00B0 fahrenheit" % ((32+1.8*self.sensor.temperature))
+        print(msg)
         call(['espeak -ven-scottish -s140 ' + msg.replace(' ', '_') + ' 2>/dev/null &'], shell=True)
 
     def on_circle_press(self):
         msg = "The current relative humidity is %.2f%%" % self.sensor.relative_humidity
+        print(msg)
         call(['espeak -ven-scottish -s140 ' + msg.replace(' ', '_') + ' 2>/dev/null &'], shell=True)
 
     def on_R3_left(self, value):
@@ -72,7 +74,6 @@ class MyController(Controller):
 
     def on_R3_x_at_rest(self):
         self.servo_pwm_hw.change_duty_cycle(7.5)
-
 
     def on_L3_up(self, value):
         prop_left = -value / 32786
