@@ -1,3 +1,37 @@
+From the ground up:
+- Flash SD Card with RPI imager with 64-bit OS, following basic setup steps
+- on external display...
+    - sudo apt install espeak
+    - python -m venv ./egen310RoverEnv
+    - source egen310RoverEnv/bin/activate
+    - pip install pyPS4Controller
+    - pip install rpi-hardware-pwm
+        - add "dtoverlay=pwm-2chan" to /boot/config.txt
+        - comment out "dtparam=audio=on" to allow bluetooth audio to be the first choice
+    - pip install RPi.GPIO
+    - pip install Adafruit-Blinka
+    - pip3 install adafruit-circuitpython-ahtx0
+
+    - enable I2C in raspi-config
+
+    - https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+        - get download command here
+    - gh auth login
+    - gh repo clone davidhjensen/egen310rover
+
+    - sudo apt-get update
+    - sudo apt-get upgrade
+    - bluetoothctl
+    - discoverable on
+    - pairable on
+    - scan on
+    - pair <dev mac addr>
+    - connect <dev mac addr>
+    - trust <dev mac addr>
+    - exit
+
+
+
 These are packages that are necessary for the code:
 Python:
 
@@ -5,17 +39,7 @@ General:
 espeak
 
 NOTES:
-username: dhjensen02
+hostname/username: dhjensen02
 pw: miniballer
-ip: 192.168.1.180
-gh cli pw: miniballer
 audio disabled so bluetooth is default
 enable I2C for I2C to work
-connect on bluetooth:
-    discoverable on
-    pairable on
-    scan on
-    pair <dev mac address>
-    connect <dev mac address>
-    trust <dev mac address>
-    exit
